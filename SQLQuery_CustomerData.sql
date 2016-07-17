@@ -1,6 +1,3 @@
---database: CustomerData
---table: Customer
-
 Create table Customer
 (
 	--increments CustomerID
