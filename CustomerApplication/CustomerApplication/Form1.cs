@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 
 
-//application gives looping error when no entries
+//++++++application gives looping error when no entries
 
 namespace CustomerApplication
 {
