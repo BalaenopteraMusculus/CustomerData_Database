@@ -33,12 +33,12 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +59,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(277, 598);
+            this.button1.Location = new System.Drawing.Point(318, 598);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(164, 40);
             this.button1.TabIndex = 2;
@@ -69,7 +69,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(559, 598);
+            this.button2.Location = new System.Drawing.Point(601, 598);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(98, 40);
             this.button2.TabIndex = 3;
@@ -78,7 +78,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(72, 598);
+            this.button3.Location = new System.Drawing.Point(102, 598);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(164, 40);
             this.button3.TabIndex = 4;
@@ -88,7 +88,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(493, 531);
+            this.button4.Location = new System.Drawing.Point(535, 531);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(164, 40);
             this.button4.TabIndex = 5;
@@ -96,33 +96,9 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Customer ID";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 80;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Customer Name";
-            this.Column2.Name = "Column2";
-            this.Column2.Width = 275;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Phone Number";
-            this.Column3.Name = "Column3";
-            this.Column3.Width = 140;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Email";
-            this.Column4.Name = "Column4";
-            this.Column4.Width = 260;
-            // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(72, 551);
+            this.textBox1.Location = new System.Drawing.Point(102, 551);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(380, 20);
             this.textBox1.TabIndex = 6;
@@ -131,11 +107,39 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(69, 531);
+            this.label1.Location = new System.Drawing.Point(99, 531);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(62, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "Search Box";
+            // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "CustomerID";
+            this.Column1.HeaderText = "CustomerID";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 80;
+            // 
+            // Column2
+            // 
+            this.Column2.DataPropertyName = "CustomerName";
+            this.Column2.HeaderText = "CustomerName";
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 275;
+            // 
+            // Column3
+            // 
+            this.Column3.DataPropertyName = "PhoneNumber";
+            this.Column3.HeaderText = "PhoneNumber";
+            this.Column3.Name = "Column3";
+            this.Column3.Width = 140;
+            // 
+            // Column4
+            // 
+            this.Column4.DataPropertyName = "Email";
+            this.Column4.HeaderText = "Email";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 260;
             // 
             // Customer_Application
             // 
@@ -166,12 +170,12 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
     }
 }
 
