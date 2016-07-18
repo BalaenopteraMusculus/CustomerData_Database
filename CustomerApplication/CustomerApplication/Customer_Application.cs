@@ -14,9 +14,9 @@ using System.Data.SqlClient;
 
 namespace CustomerApplication
 {
-    public partial class Form1 : Form
+    public partial class Customer_Application : Form
     {
-        public Form1()
+        public Customer_Application()
         {
             InitializeComponent();
 
