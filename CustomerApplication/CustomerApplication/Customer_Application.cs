@@ -34,27 +34,8 @@ namespace CustomerApplication
             sda = new SqlDataAdapter("select * from Customer", sConnect);
 
             //fill new datatable and assign data to dataGridView1
-
             sda.Fill(dt);
             dataGridView1.DataSource = dt;
-
-            /*
-            //open connection to server
-            sConnect.Open();
-
-            //read all data
-            SqlDataReader sdr = command.ExecuteReader();
-
-            //store sql data source
-            BindingSource source = new BindingSource();
-            source.DataSource = sdr;
-
-            //fill grid with retrieved data from db
-            dataGridView1.DataSource = source;
-
-            //close server connection
-            sConnect.Close();
-            */
 
         }
 
