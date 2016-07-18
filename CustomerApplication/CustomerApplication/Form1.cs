@@ -20,6 +20,7 @@ namespace CustomerApplication
         {
             InitializeComponent();
 
+            /*
             //create connection object SqlConnection
             SqlConnection sConnect = new SqlConnection();
 
@@ -45,6 +46,7 @@ namespace CustomerApplication
 
             //close server connection
             sConnect.Close();
+            */
 
         }
 
@@ -69,6 +71,16 @@ namespace CustomerApplication
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
         {
 
         }
