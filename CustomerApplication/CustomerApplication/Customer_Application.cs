@@ -15,7 +15,6 @@ namespace CustomerApplication
     {
         SqlDataAdapter sda;
 
-
         //create connection object SqlConnection
         //specify connection string for object 
         //string: database location;database name;authentication type
@@ -44,16 +43,24 @@ namespace CustomerApplication
 
 
         //search button
+        //add return button 
         private void button4_Click(object sender, EventArgs e)
         {
 
+            //open database connection
             sConnect.Open();
+
+            //create sql command string variable
             SqlCommand command = sConnect.CreateCommand();
 
             command.CommandType = CommandType.Text;
 
             //select table entries where old CustomerID, CustomerName, PhoneNumber, Email are equal to 'old' text boxes
-            command.CommandText = "select * from Customer where (CustomerID ='" + IDText.Text + "') OR (CustomerName ='" + oNameText.Text + "') OR (PhoneNumber = '" + oNumberText.Text + "') OR (Email = '" + oEmailText.Text + "')";
+            command.CommandText = "select * from Customer where (CustomerID ='" + IDText.Text + "')" + 
+                " OR (CustomerName ='" + oNameText.Text + "') " +
+                " OR (PhoneNumber = '" + oNumberText.Text + "') " +
+                " OR (Email = '" + oEmailText.Text + "')";
+            
 
             command.ExecuteNonQuery();
 
@@ -88,6 +95,7 @@ namespace CustomerApplication
         }
 
         //add button
+        //add confirmation msg if info left out 
         private void button1_Click(object sender, EventArgs e)
         {
             //open database connection
