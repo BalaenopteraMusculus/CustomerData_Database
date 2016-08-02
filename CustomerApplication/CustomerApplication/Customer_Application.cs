@@ -51,7 +51,7 @@ namespace CustomerApplication
             string Name = oNameText.Text;
             string Phone = oNumberText.Text;
             string Email = oEmailText.Text;
-
+            //string SearchFilter = " ";
 
             //open database connection
             sConnect.Open();
@@ -62,12 +62,44 @@ namespace CustomerApplication
             command.CommandType = CommandType.Text;
 
             //select table entries where old CustomerID, CustomerName, PhoneNumber, Email are equal to 'old' text boxes
-            // ++allow for narrow searches with more than one field
-            command.CommandText = "select * from Customer where (CustomerID ='" + ID + "')" + 
+            command.CommandText = "select * from Customer where (CustomerID ='" + ID + "')" +
                 " OR (CustomerName ='" + Name + "') " +
                 " OR (PhoneNumber = '" + Phone + "') " +
                 " OR (Email = '" + Email + "')";
+
+            // ++attempt to narrow searches with more than one field
+            /*
+            if ( *.Text != SearchFilter )
+            {
+                command.CommandText = "select * from Customer where (CustomerID ='" + ID + "')" +
+                " AND (CustomerName ='" + Name + "') " +
+                " AND (PhoneNumber = '" + Phone + "') " +
+                " AND (Email = '" + Email + "')";
+
+            }
             
+            else {
+                command.CommandText = "select * from Customer where (CustomerID ='" + ID + "')" +
+                " OR (CustomerName ='" + Name + "') " +
+                " OR (PhoneNumber = '" + Phone + "') " +
+                " OR (Email = '" + Email + "')";
+            }
+            */
+
+            /*
+            BindingSource bs = new BindingSource();
+            bs.DataSource = dataGridView1.DataSource;
+            bs.Filter = dataGridView1.Columns[0].HeaderText.ToString() + " LIKE '%" + ID + "%'" +
+                dataGridView1.Columns[1].HeaderText.ToString() + " LIKE '%" + Name + "%'" +
+                dataGridView1.Columns[2].HeaderText.ToString() + " LIKE '%" + Phone + "%'" +
+                dataGridView1.Columns[3].HeaderText.ToString() + " LIKE '%" + Email + "%'";
+
+            dataGridView1.DataSource = bs;
+            
+            string rowFilter = string.Format("CustomerID LIKE '%{0}%' AND CustomerName LIKE '%{1}%'",
+                                  ID, Name);
+            (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = rowFilter;
+            */
 
             command.ExecuteNonQuery();
 
@@ -174,6 +206,9 @@ namespace CustomerApplication
 
         }
 
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
+        }
     }
 }
