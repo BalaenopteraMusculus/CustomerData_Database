@@ -43,9 +43,15 @@ namespace CustomerApplication
 
 
         //search button
-        //add return button 
+        //++add return button 
         private void button4_Click(object sender, EventArgs e)
         {
+            //text box string variables
+            string ID = IDText.Text;
+            string Name = oNameText.Text;
+            string Phone = oNumberText.Text;
+            string Email = oEmailText.Text;
+
 
             //open database connection
             sConnect.Open();
@@ -56,10 +62,11 @@ namespace CustomerApplication
             command.CommandType = CommandType.Text;
 
             //select table entries where old CustomerID, CustomerName, PhoneNumber, Email are equal to 'old' text boxes
-            command.CommandText = "select * from Customer where (CustomerID ='" + IDText.Text + "')" + 
-                " OR (CustomerName ='" + oNameText.Text + "') " +
-                " OR (PhoneNumber = '" + oNumberText.Text + "') " +
-                " OR (Email = '" + oEmailText.Text + "')";
+            // ++allow for narrow searches with more than one field
+            command.CommandText = "select * from Customer where (CustomerID ='" + ID + "')" + 
+                " OR (CustomerName ='" + Name + "') " +
+                " OR (PhoneNumber = '" + Phone + "') " +
+                " OR (Email = '" + Email + "')";
             
 
             command.ExecuteNonQuery();
@@ -73,7 +80,10 @@ namespace CustomerApplication
         }
 
         //update button
-        //SQL command error
+        //++SQL command error, likely the SQL query
+        //++implement direct editting within the grid?
+        //++highlight added entries?
+        
         private void button3_Click(object sender, EventArgs e)
         {
             /*
@@ -96,6 +106,8 @@ namespace CustomerApplication
 
         //add button
         //add confirmation msg if info left out 
+        //++clear text boxes after adding?
+        //++add a clear button
         private void button1_Click(object sender, EventArgs e)
         {
             //open database connection
@@ -117,6 +129,7 @@ namespace CustomerApplication
 
         //delete button
         //deletes by CustomerID
+        //++figure out how to remove primary key
         private void deleteButton_Click(object sender, EventArgs e)
         {
             //open database connection
