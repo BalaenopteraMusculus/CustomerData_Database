@@ -14,7 +14,8 @@ namespace CustomerApplication
     public partial class Customer_Application : Form
     {
         // Specify database location, database name, authentication type
-        SqlConnection CustomerDB = new SqlConnection("data source = RK-PC\\SQLEXPRESS; database = CustomerData; integrated security = SSPI");
+        SqlConnection CustomerDB = new SqlConnection("data source = RK-PC\\SQLEXPRESS; " + 
+            "database = CustomerData; integrated security = SSPI");
 
 
         // Open form and load all Customer information
@@ -68,46 +69,43 @@ namespace CustomerApplication
             //create sql command string variable
             SqlCommand command = CustomerDB.CreateCommand();
             command.CommandType = CommandType.Text;
-            command.CommandText = ButtonSQLCommand("read");
-            Console.WriteLine("Displaying current SQL command: " + command.CommandText);
-
-            if (!string.IsNullOrEmpty(command.CommandText))
+            if (!string.IsNullOrEmpty(ReadButtonSQLCommand()))
             {
-                command.ExecuteNonQuery();
-
-                // Fill the data table with selected entries
-                DataTable dt = new DataTable();
-                SqlDataAdapter sda = new SqlDataAdapter(command);
-                sda.Fill(dt);
-                dataGridView1.DataSource = dt;
-            } else
-            {
-                MessageBox.Show("Please enter a search parameter to search.");
+                command.CommandText = ReadButtonSQLCommand();
             }
+            else
+            {
+                command.CommandText = "select * from Customer";
+            }
+
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter sda = new SqlDataAdapter(command);
+            sda.Fill(dt);
+            dataGridView1.DataSource = dt;
             CustomerDB.Close();
         }
 
 
-        //update button
-        //++SQL command error, likely the SQL query
+        // Update button
+        // Update table entries by replacing entries in 'old' text 
+        // box entries with 'new' text box entries
         private void button3_Click(object sender, EventArgs e)
         {
             CustomerDB.Open();
             SqlCommand command = CustomerDB.CreateCommand();
             command.CommandType = CommandType.Text;
-
-            //update table entries by replacing entries in 'old' text box entries with 'new' text box entries
-            command.CommandText = "update Customer set ((CustomerName ='" + NameText.Text + "') " +
-                "where (CustomerName = ''" + oNameText.Text + "')) " +
-                "OR ((PhoneNumber = '" + NumberText.Text + "') " +
-                "where (PhoneNumber = '" + oNumberText.Text + "'))" + 
-                "OR ((Email = '" + EmailText.Text + "' ) " +
-                "where (Email = '" + oEmailText.Text + "'))";
-
+            if (!string.IsNullOrEmpty(UpdateButtonSQLCommand()))
+            {
+                command.CommandText = UpdateButtonSQLCommand();
+            }
+            else
+            {
+                command.CommandText = "select * from Customer";
+            }
             command.ExecuteNonQuery();
             CustomerDB.Close();
             live_update();
-            MessageBox.Show("Customer data updated.");   
         }
 
 
@@ -160,25 +158,11 @@ namespace CustomerApplication
 
 
         // Dynamically adjust query depending on which text boxes are being used to search
-        // Append query command depending on what is currently entered in text boxes
         // Return empty command if nothing searched
-        private string ButtonSQLCommand(string button)
+        private string ReadButtonSQLCommand()
         {
-            string result = "";
+            string result = "select * from Customer where";
             string[] TextBoxArray = new string[4] { IDText.Text, oNameText.Text, oNumberText.Text, oEmailText.Text };
-
-            // Change query depending on button function
-            if (button.Contains("read"))
-            {
-                result = "select * from Customer where";
-            } else if (button.Contains("update"))
-            {
-                result = "";
-            } else if (button.Contains("delete"))
-            {
-                result = "";
-            }
-
             int searchParamCount = 0;
             for (int i = 0; i < 4; i++)
             {
@@ -206,7 +190,50 @@ namespace CustomerApplication
                         result += " (Email = '" + TextBoxArray[3] + "')";
                     }
                     searchParamCount++;
-                } else if (searchParamCount == 0 && i == 3)
+                }
+                else if (searchParamCount == 0 && i == 3)
+                {
+                    result = "";
+                    break;
+                }
+            }
+            return result;
+        }
+
+
+        // Dynamically adjust query depending on which text boxes are being used to search
+        // Return empty command if nothing searched
+        private string UpdateButtonSQLCommand()
+        {
+            string result = "UPDATE [CustomerData].[dbo].[Customer] ";
+            string[] oldTextBoxArray = new string[3] { oNameText.Text, oNumberText.Text, oEmailText.Text };
+            string[] newTextBoxArray = new string[3] { NameText.Text, NumberText.Text, EmailText.Text };
+            int searchParamCount = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                if (oldTextBoxArray != null && newTextBoxArray != null 
+                    && !string.IsNullOrEmpty(oldTextBoxArray[i]) && !string.IsNullOrEmpty(newTextBoxArray[i]))
+                {
+                    if (searchParamCount > 0)
+                    {
+                        result += " AND ";
+                    }
+
+                    if (i == 0)
+                    {
+                        result += "SET CustomerName = '" + newTextBoxArray[0] + "' where CustomerName = '" + oldTextBoxArray[0] + "'";
+                    }
+                    else if (i == 1)
+                    {
+                        result += "SET PhoneNumber = '" + newTextBoxArray[1] + "' where PhoneNumber = '" + oldTextBoxArray[1] + "'";
+                    }
+                    else if (i == 2)
+                    {
+                        result += "SET Email = '" + newTextBoxArray[2] + "' where Email = '" + oldTextBoxArray[2] + "'"; 
+                    }
+                    searchParamCount++;
+                }
+                else if (searchParamCount == 0 && i == 2)
                 {
                     result = "";
                     break;
