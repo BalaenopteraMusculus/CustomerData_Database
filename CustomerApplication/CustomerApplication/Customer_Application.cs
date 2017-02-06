@@ -7,6 +7,7 @@ namespace CustomerApplication
 {
     public class Account 
     {
+        public string ID { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
@@ -90,23 +91,30 @@ namespace CustomerApplication
         // Update button
         // Update table entries by replacing entries in 'old' text 
         // box entries with 'new' text box entries
-        // ** fix: unable to update more than one at a time
         private void UpdateButton(object sender, EventArgs e)
         {
             CustomerDB.Open();
             SqlCommand command = CustomerDB.CreateCommand();
             command.CommandType = CommandType.Text;
-            if (!string.IsNullOrEmpty(UpdateButtonSQLCommand()))
+            if (UpdatingToNull())
             {
-                command.CommandText = UpdateButtonSQLCommand();
+                MessageBox.Show("Cannot update Customer Data to a null value.");
+                CustomerDB.Close();
             }
             else
             {
-                command.CommandText = "select * from Customer";
+                if (!string.IsNullOrEmpty(UpdateButtonSQLCommand()))
+                {
+                    command.CommandText = UpdateButtonSQLCommand();
+                }
+                else
+                {
+                    command.CommandText = "select * from Customer";
+                }
+                command.ExecuteNonQuery();
+                CustomerDB.Close();
+                live_update();
             }
-            command.ExecuteNonQuery();
-            CustomerDB.Close();
-            live_update();
         }
 
 
@@ -163,9 +171,7 @@ namespace CustomerApplication
         }
 
 
-        // Delete button - deletes by CustomerID
-        // try to delete by other param
-        // 
+        // Delete button - only deletes by CustomerID
         private void DeleteButton(object sender, EventArgs e)
         {
             //open database connection
@@ -176,20 +182,37 @@ namespace CustomerApplication
 
             command.CommandType = CommandType.Text;
 
-            //delete Customer data by CustomerID 
-            command.CommandText = "delete from Customer where CustomerID = '" + IDText.Text + "'";
+            Account account = new Account();
+            command.CommandText = "Select CustomerID from Customer where CustomerID = '" + IDText.Text + "'";
+            account.ID = command.ExecuteScalar().ToString();
 
-            command.ExecuteNonQuery();
-            CustomerDB.Close();
-            live_update();
+            if (string.IsNullOrWhiteSpace(IDText.Text))
+            {
+                MessageBox.Show("Please enter a CustomerID to delete an entry.");
+                CustomerDB.Close();
+            }
+            
+            else if (string.IsNullOrWhiteSpace(account.ID))
+            {
+                MessageBox.Show("Customer does not exist. Delete not performed.");
+                CustomerDB.Close();
+            }
+            else
+            {
+                //delete Customer data by CustomerID 
+                command.CommandText = "delete from Customer where CustomerID = '" + IDText.Text + "'";
+                command.ExecuteNonQuery();
+                CustomerDB.Close();
+                live_update();
+                MessageBox.Show("Customer data deleted.");
+            }
 
-            MessageBox.Show("Customer data deleted.");
         }
 
 
-        //--------------------------------------------Functions to adjust queries depending on UI state--------------------------------------------
+        //--------------------------------------------Functions to adjust queries depending on UI state--------------------------------------------//
 
-        // Adjust query depending on which text boxes are being used to search
+        // Adjust search query depending on which text boxes are being used to search
         // Return empty command if nothing searched
         private string SearchButtonSQLCommand()
         {
@@ -233,68 +256,73 @@ namespace CustomerApplication
         }
 
 
-        // Dynamically adjust query depending on which text boxes are being used to search
+        // Adjust update query depending on which text boxes are being used to search
         // Return empty command if nothing searched
         private string UpdateButtonSQLCommand()
         {
-            string result = "UPDATE [CustomerData].[dbo].[Customer] ";
+            string FinalResult = "";
+            string SetResult = "UPDATE [CustomerData].[dbo].[Customer] SET ";
+            string WhereResult = "WHERE ";
             string[] oldTextBoxArray = new string[3] { oNameText.Text, oNumberText.Text, oEmailText.Text };
             string[] newTextBoxArray = new string[3] { NameText.Text, NumberText.Text, EmailText.Text };
             int searchParamCount = 0;
             for (int i = 0; i < 3; i++)
             {
-                if (oldTextBoxArray != null && newTextBoxArray != null 
-                    && !string.IsNullOrEmpty(oldTextBoxArray[i]) && !string.IsNullOrEmpty(newTextBoxArray[i]))
+                if ( (oldTextBoxArray != null && newTextBoxArray != null ) 
+                    && (!string.IsNullOrEmpty(oldTextBoxArray[i]) || !string.IsNullOrEmpty(newTextBoxArray[i])) )
                 {
                     if (searchParamCount > 0)
                     {
-                        result += " AND ";
+                        SetResult += ", ";
+                        WhereResult += "AND ";
                     }
 
                     if (i == 0)
                     {
-                        result += "SET CustomerName = '" + newTextBoxArray[0] + "' where CustomerName = '" + oldTextBoxArray[0] + "'";
+                        SetResult += "CustomerName = '" + newTextBoxArray[0] + "' ";
+                        WhereResult += "CustomerName = '" + oldTextBoxArray[0] + "' ";
                     }
                     else if (i == 1)
                     {
-                        result += "SET PhoneNumber = '" + newTextBoxArray[1] + "' where PhoneNumber = '" + oldTextBoxArray[1] + "'";
+                        SetResult += "PhoneNumber = '" + newTextBoxArray[1] + "' ";
+                        WhereResult += "PhoneNumber = '" + oldTextBoxArray[1] + "' ";
                     }
                     else if (i == 2)
                     {
-                        result += "SET Email = '" + newTextBoxArray[2] + "' where Email = '" + oldTextBoxArray[2] + "'"; 
+                        SetResult += "Email = '" + newTextBoxArray[2] + "' ";
+                        WhereResult += "Email = '" + oldTextBoxArray[2] + "' ";
                     }
                     searchParamCount++;
+                    FinalResult = SetResult + WhereResult;
                 }
                 else if (searchParamCount == 0 && i == 2)
                 {
-                    result = "";
                     break;
                 }
             }
-            return result;
+            return FinalResult;
         }
 
-/*
-        // Store result of SQL command into string
-        private string SQLtoString (SqlCommand command, string columnName)
+
+        // Return true if trying to update a value to null
+        private Boolean UpdatingToNull()
         {
-            string result = "";
-            using (command)
+            Boolean res = false;
+
+            string[] oldTextBoxArray = new string[3] { oNameText.Text, oNumberText.Text, oEmailText.Text };
+            string[] newTextBoxArray = new string[3] { NameText.Text, NumberText.Text, EmailText.Text };
+
+            for (int i=0; i<3; i++)
             {
-                //command.Connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
+                if (string.IsNullOrWhiteSpace(newTextBoxArray[i]) && !string.IsNullOrWhiteSpace(oldTextBoxArray[i]))
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        result = reader.GetString(reader.GetOrdinal(columnName));
-                    }
-                    //command.Connection.Close();
+                    res = true;
+                    break;
                 }
             }
-            return result;
+            return res;
         }
-       */ 
+
 
     }
 }
