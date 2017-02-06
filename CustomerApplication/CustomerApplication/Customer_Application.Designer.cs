@@ -104,7 +104,7 @@
             this.addButton.TabIndex = 2;
             this.addButton.Text = "add";
             this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.button1_Click);
+            this.addButton.Click += new System.EventHandler(this.CreateButton);
             // 
             // deleteButton
             // 
@@ -114,7 +114,7 @@
             this.deleteButton.TabIndex = 3;
             this.deleteButton.Text = "delete";
             this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton);
             // 
             // updateButton
             // 
@@ -124,7 +124,7 @@
             this.updateButton.TabIndex = 4;
             this.updateButton.Text = "update";
             this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.button3_Click);
+            this.updateButton.Click += new System.EventHandler(this.UpdateButton);
             // 
             // searchButton
             // 
@@ -134,7 +134,7 @@
             this.searchButton.TabIndex = 5;
             this.searchButton.Text = "search";
             this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.button4_Click);
+            this.searchButton.Click += new System.EventHandler(this.SearchButton);
             // 
             // NameText
             // 
@@ -276,7 +276,7 @@
             this.Name = "Customer_Application";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Text = "Customer Application";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.LiveUpdater);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
